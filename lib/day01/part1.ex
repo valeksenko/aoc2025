@@ -17,7 +17,7 @@ defmodule AoC2025.Day01.Part1 do
     |> Enum.count(&(&1 == 0))
   end
 
-  defp to_op(<<"L", num::binary>>), do: - String.to_integer(num)
+  defp to_op(<<"L", num::binary>>), do: -String.to_integer(num)
   defp to_op(<<"R", num::binary>>), do: String.to_integer(num)
 
   defp dial(turns, pos) do

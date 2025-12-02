@@ -17,11 +17,12 @@ defmodule AoC2025.Day01.Part2 do
     |> Enum.sum()
   end
 
-  defp to_op(<<"L", num::binary>>), do: - String.to_integer(num)
+  defp to_op(<<"L", num::binary>>), do: -String.to_integer(num)
   defp to_op(<<"R", num::binary>>), do: String.to_integer(num)
 
   defp dial(turns, pos) do
-    with next <- Integer.mod(pos + turns, @positons), do: {div(abs(turns), @positons) + adjust(pos, next, turns >= 0), next}
+    with next <- Integer.mod(pos + turns, @positons),
+         do: {div(abs(turns), @positons) + adjust(pos, next, turns >= 0), next}
   end
 
   defp adjust(0, _, _), do: 0
