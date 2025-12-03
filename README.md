@@ -1,4 +1,4 @@
-# AoC2025
+# AoC2025 🎄
 
 Solutions in Elixir for [Advent of Code 2025](https://adventofcode.com/2025)
 
