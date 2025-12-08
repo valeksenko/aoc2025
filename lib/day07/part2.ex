@@ -16,22 +16,18 @@ defmodule AoC2025.Day07.Part2 do
     diagram
     # sort by y
     |> Enum.sort_by(&elem(&1, 1))
-    |> Enum.reduce([MapSet.new([start])], &split/2)
-    |> length()
+    |> Enum.reduce(%{start => 1}, &split/2)
+    |> Map.values()
+    |> Enum.sum()
   end
 
   defp split({x, _}, timelines) do
+    worlds = Map.get(timelines, x, 0)
+
     timelines
-    |> Enum.reduce([], fn beams, t ->
-      if MapSet.member?(beams, x) do
-        [
-          beams |> MapSet.delete(x) |> MapSet.put(x - 1),
-          beams |> MapSet.delete(x) |> MapSet.put(x + 1)
-        ] ++ t
-      else
-        [beams | t]
-      end
-    end)
+    |> Map.update(x - 1, worlds, &(&1 + worlds))
+    |> Map.update(x + 1, worlds, &(&1 + worlds))
+    |> Map.put(x, 0)
   end
 
   defp parse(data) do
