@@ -16,21 +16,30 @@ defmodule AoC2025.Day05.Part2 do
 
   defp count_fresh({fresh_ranges, _ingridients}) do
     fresh_ranges
-    |> Enum.sort_by(& &1.first)
-    # |> Enum.reduce([], &collect_fresh/2)
+    |> Enum.reduce([], &collect_fresh/2)
     |> Enum.sum_by(&Range.size/1)
   end
 
-  # defp collect_fresh(range, []), do: [range]
+  defp collect_fresh(range, ranges) do
+    ranges
+    |> shrink(find_first(range.first, ranges), find_last(range.last, ranges))
+  end
 
-  # defp collect_fresh(range, ranges) do
-  #   ranges
-  #   #|>  ...
-  # end
+  defp find_first(n, ranges) do
+    case Enum.find(ranges, nil, &(n in &1)) do
+      nil -> n
+      r -> r.first
+    end
+  end
 
-  # defp cover(r1, r2) when (r1.first <= r2.first) and (r1.last >= r2.last), do: [r1]
-  # defp cover(r1, r2) when (r2.first <= r1.first) and (r2.last >= r1.last), do: [r2]
-  # defp cover(r1, r2) when (r1.first < r2.first) and (r1.last < r2.last), do: [r1, (r1.last + 1)..r2.last]
-  # defp cover(r1, r2) when (r2.first < r1.first) and (r2.last < r1.last), do: [r2, (r2.last + 1)..r1.last]
-  # defp cover(r1, r2), do: [r1, r2]
+  defp find_last(n, ranges) do
+    case Enum.find(ranges, nil, &(n in &1)) do
+      nil -> n
+      r -> r.last
+    end
+  end
+
+  defp shrink(ranges, first, last) do
+    [first..last | Enum.filter(ranges, &Range.disjoint?(&1, first..last))]
+  end
 end
