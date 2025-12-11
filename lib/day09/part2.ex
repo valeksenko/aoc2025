@@ -18,18 +18,18 @@ defmodule AoC2025.Day09.Part2 do
     |> unique_pairs()
     |> Enum.reject(&invalid?(&1, coordinates))
     |> Enum.max_by(&rectangle_size/1)
-    |> IO.inspect
+    |> IO.inspect()
   end
 
   defp invalid?({[x1, y1], [x2, y2]}, coordinates) do
     coordinates
     |> Enum.any?(fn [x, y] -> between?(x, [x1, x2]) and between?(y, [y1, y2]) end)
-    |> IO.inspect(label: inspect {[x1, y1], [x2, y2]})
+    |> IO.inspect(label: inspect({[x1, y1], [x2, y2]}))
   end
 
   defp between?(p, positions) do
     [p1, p2] = Enum.sort(positions)
-    (p > p1) and (p < p2)
+    p > p1 and p < p2
   end
 
   defp to_coord(input) do
