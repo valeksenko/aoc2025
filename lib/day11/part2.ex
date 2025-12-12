@@ -1,6 +1,6 @@
-defmodule AoC2025.Day11.Part1 do
+defmodule AoC2025.Day11.Part2 do
   @moduledoc """
-    @see https://adventofcode.com/2025/day/11
+    @see https://adventofcode.com/2025/day/11#part2
   """
   @behaviour AoC2025.Day
 
@@ -9,7 +9,13 @@ defmodule AoC2025.Day11.Part1 do
   def run(data) do
     data
     |> Enum.reduce(%{}, &to_connection/2)
-    |> find_paths("you", "out")
+    |> find_paths("svr", "out")
+    |> Enum.filter(fn d ->
+      Enum.any?(d, &(&1 == "dac"))
+    end)
+    |> Enum.filter(fn d ->
+      Enum.any?(d, &(&1 == "fft"))
+    end)
     |> length()
   end
 
