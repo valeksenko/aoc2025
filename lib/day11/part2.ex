@@ -9,22 +9,32 @@ defmodule AoC2025.Day11.Part2 do
   def run(data) do
     data
     |> Enum.reduce(%{}, &to_connection/2)
-    |> find_paths("svr", "out")
-    |> Enum.filter(fn d ->
-      Enum.any?(d, &(&1 == "dac"))
-    end)
-    |> Enum.filter(fn d ->
-      Enum.any?(d, &(&1 == "fft"))
-    end)
-    |> length()
+    |> count_paths()
   end
 
-  defp find_paths(devices, start, finish) do
-    start
-    |> find_path([], [], finish, devices)
+  defp count_paths(devices) do
+    [
+      [
+         {"svr", "dac"},
+         {"dac", "fft"},
+         {"fft", "out"},
+      ],
+      [
+         {"svr", "fft"},
+         {"fft", "dac"},
+         {"dac", "out"},
+      ]
+    ]
+    |> Enum.sum_by(fn p ->
+      p
+      |> Enum.map(fn {start, finish} ->
+        find_path(start, 0, [], finish, devices)
+      end)
+      |> Enum.product()
+    end)
   end
 
-  defp find_path(finish, paths, visited, finish, _), do: [visited | paths]
+  defp find_path(finish, paths, _, finish, _), do: paths + 1
 
   defp find_path(device, paths, visited, finish, devices) do
     case devices[device] do
